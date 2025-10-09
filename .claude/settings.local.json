@@ -4,7 +4,13 @@
       "Bash(npx create-next-app:*)",
       "Bash(supabase init:*)",
       "Bash(npm install)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm run build:*)",
+      "Bash(tee:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(npm run lint)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []
