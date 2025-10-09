@@ -14,7 +14,7 @@ export default function FeynmanPage() {
         <h3 className="font-semibold mb-2 text-blue-900">What is the Feynman Technique?</h3>
         <p className="text-blue-800 text-sm">
           The Feynman Technique is a learning method where you teach a concept in simple terms.
-          If you can't explain it simply, you don't understand it well enough. Our AI evaluates
+          If you can&apos;t explain it simply, you don&apos;t understand it well enough. Our AI evaluates
           your explanations and helps you identify gaps in your knowledge.
         </p>
       </div>

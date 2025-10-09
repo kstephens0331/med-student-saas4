@@ -91,7 +91,7 @@ export default function OnboardingPage() {
   return (
     <div className="card">
       <h1 className="text-3xl font-bold text-center mb-2">Welcome!</h1>
-      <p className="text-center text-gray-600 mb-6">Let's get you set up</p>
+      <p className="text-center text-gray-600 mb-6">Let&apos;s get you set up</p>
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">

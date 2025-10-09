@@ -20,6 +20,7 @@ export default function StudySessionPage() {
 
   useEffect(() => {
     loadSession()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadSession = async () => {
