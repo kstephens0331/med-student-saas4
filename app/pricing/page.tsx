@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function PricingPage() {
   const router = useRouter()
@@ -62,12 +63,12 @@ export default function PricingPage() {
                 <span>Basic features</span>
               </li>
             </ul>
-            <button
-              onClick={() => router.push('/signup')}
-              className="btn-secondary w-full"
+            <Link
+              href="/signup"
+              className="btn-secondary w-full block text-center"
             >
               Get Started Free
-            </button>
+            </Link>
           </div>
 
           {/* Individual Tier */}
