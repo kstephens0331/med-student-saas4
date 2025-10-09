@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     // Get user profile
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('school_id, subscriptions(*)')
+      .select('school_id')
       .eq('id', session.user.id)
       .single()
 
@@ -31,8 +31,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User profile not found' }, { status: 404 })
     }
 
+    // Get subscription
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('tier')
+      .eq('user_id', session.user.id)
+      .single()
+
     // Check subscription and daily limit for free tier
-    if (profile.subscriptions?.tier === 'free') {
+    if (subscription?.tier === 'free') {
       const today = new Date().toISOString().split('T')[0]
 
       const { data: usage } = await supabase
