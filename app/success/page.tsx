@@ -20,7 +20,7 @@ export default function SuccessPage() {
         </div>
 
         <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="font-semibold mb-2">What's Next?</h3>
+          <h3 className="font-semibold mb-2">What&apos;s Next?</h3>
           <ul className="text-sm text-left text-gray-700 space-y-1">
             <li>• Upload your study materials (PDFs, lectures, notes)</li>
             <li>• AI generates 1,200-1,400 questions per block</li>
