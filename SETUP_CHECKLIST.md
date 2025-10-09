@@ -48,15 +48,6 @@ Use this checklist to ensure you've completed all setup steps.
 - [ ] Get API key
 - [ ] Add to .env.local: `ANTHROPIC_API_KEY`
 
-### Google AI (Vision)
-- [ ] Get API key at https://ai.google.dev
-- [ ] Add to .env.local: `GOOGLE_AI_API_KEY`
-
-### OpenAI (Embeddings)
-- [ ] Sign up at https://platform.openai.com
-- [ ] Create API key
-- [ ] Add to .env.local: `OPENAI_API_KEY`
-
 ## ✅ Phase 4: Stripe Configuration
 
 ### Create Account

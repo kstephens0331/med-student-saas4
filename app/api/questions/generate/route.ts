@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { generateQuestions } from '@/lib/llm/factory'
-import PDFParser from 'pdf-parse'
+
+// Dynamic import to avoid build-time issues
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,6 +47,8 @@ export async function POST(request: NextRequest) {
     let extractedText = ''
 
     if (file.file_type === 'pdf') {
+      // Dynamic import of pdf-parse to avoid build issues
+      const PDFParser = (await import('pdf-parse')).default
       const buffer = await fileData.arrayBuffer()
       const pdfData = await PDFParser(Buffer.from(buffer))
       extractedText = pdfData.text
