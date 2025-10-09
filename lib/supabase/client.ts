@@ -1,6 +1,7 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { createClient } from '@supabase/supabase-js'
 
+// Client-side Supabase client
 export const supabase = createClientComponentClient()
 
 // Server-side client with service role (for admin operations)
