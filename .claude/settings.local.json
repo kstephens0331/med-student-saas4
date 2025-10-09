@@ -12,7 +12,9 @@
       "Bash(npm run lint)",
       "Bash(npx tsc:*)",
       "Bash(git commit:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm outdated:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
