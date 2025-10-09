@@ -31,7 +31,7 @@ A comprehensive medical education SaaS platform designed for medical students pr
 
 #### 4. **RAG Q&A System** ✓
 - Vector similarity search using pgvector
-- OpenAI ada-002 embeddings
+- Together.ai m2-bert embeddings (cost-efficient)
 - Answers ONLY from uploaded materials
 - Source citation
 - Free tier: 5 questions/day limit
@@ -106,8 +106,8 @@ A comprehensive medical education SaaS platform designed for medical students pr
 ### AI/LLM Stack
 - **Primary LLM**: Together.ai (Llama 3.1 70B) - $0.88/1M tokens
 - **Fallback LLM**: Anthropic Claude Sonnet 4 - $3/1M tokens
-- **Vision**: Google Gemini Flash
-- **Embeddings**: OpenAI ada-002
+- **Embeddings**: Together.ai m2-bert-80M-8k-retrieval - $0.01/1M tokens
+- **Vision**: Phase 2 (will use Claude Vision or GPT-4 Vision)
 
 ### Payments
 - **Provider**: Stripe

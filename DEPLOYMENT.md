@@ -103,16 +103,6 @@ supabase db push
 2. Get API key
 3. Copy API key
 
-#### Google AI (Gemini)
-1. Go to [ai.google.dev](https://ai.google.dev)
-2. Get API key
-3. Copy API key
-
-#### OpenAI
-1. Go to [platform.openai.com](https://platform.openai.com)
-2. API Keys → Create new key
-3. Copy API key
-
 ### 6. Deploy to Vercel
 
 #### Option A: Vercel CLI
@@ -132,8 +122,6 @@ vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
 vercel env add SUPABASE_SERVICE_ROLE_KEY production
 vercel env add TOGETHER_API_KEY production
 vercel env add ANTHROPIC_API_KEY production
-vercel env add GOOGLE_AI_API_KEY production
-vercel env add OPENAI_API_KEY production
 vercel env add NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY production
 vercel env add STRIPE_SECRET_KEY production
 vercel env add STRIPE_WEBHOOK_SECRET production
@@ -214,8 +202,6 @@ railway up
 ### LLM APIs (Required)
 - ✅ `TOGETHER_API_KEY`
 - ✅ `ANTHROPIC_API_KEY`
-- ✅ `GOOGLE_AI_API_KEY`
-- ✅ `OPENAI_API_KEY`
 
 ### Stripe (Required)
 - ✅ `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`

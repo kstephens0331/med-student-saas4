@@ -18,7 +18,7 @@ A comprehensive medical education platform for USMLE exam preparation with AI-po
 
 ### Coming Soon (Phase 2 & 3)
 - 🔄 Railway Background Workers (transcription, full question generation)
-- 🔄 Photo Question Upload (Gemini Vision)
+- 🔄 Photo Question Upload (Claude Vision or GPT-4 Vision)
 - 🔄 Feynman Voice/Video Mode
 - 🔄 Blocks 9-10 Review Mode (15,000-20,000 questions)
 - 🔄 Admin Dashboard & Analytics
@@ -29,10 +29,8 @@ A comprehensive medical education platform for USMLE exam preparation with AI-po
 - **Database**: Supabase (PostgreSQL + Auth + Storage)
 - **Vector Search**: pgvector extension
 - **LLM Strategy**:
-  - Together.ai (primary - Llama 3.1 70B) - cost-efficient
+  - Together.ai (primary - Llama 3.1 70B + m2-bert embeddings) - cost-efficient
   - Anthropic Claude Sonnet 4 (fallback & evaluation)
-  - Google Gemini (multimodal/vision)
-  - OpenAI (embeddings only)
 - **Payments**: Stripe
 - **Hosting**: Vercel (Next.js), Railway (background workers)
 
@@ -76,7 +74,7 @@ medschoolstudy/
 - npm or pnpm
 - Supabase account
 - Stripe account
-- API keys for: Together.ai, Anthropic, Google AI, OpenAI
+- API keys for: Together.ai, Anthropic
 
 ### 2. Install Dependencies
 ```bash
@@ -95,8 +93,6 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 # LLM APIs
 TOGETHER_API_KEY=your_together_api_key
 ANTHROPIC_API_KEY=your_anthropic_api_key
-GOOGLE_AI_API_KEY=your_google_ai_api_key
-OPENAI_API_KEY=your_openai_api_key
 
 # Transcription (Phase 2)
 ASSEMBLYAI_API_KEY=your_assemblyai_api_key
@@ -253,17 +249,15 @@ railway up
 ## Multi-LLM Strategy
 
 ### Cost Optimization
-- **Together.ai** (Primary): $0.88/1M tokens - bulk question generation
+- **Together.ai** (Primary): $0.88/1M tokens - bulk question generation, $0.01/1M tokens for embeddings
 - **Claude Sonnet** (Fallback): $3/1M tokens - complex reasoning, evaluation
-- **Gemini**: Multimodal/vision tasks
-- **OpenAI**: Embeddings only (ada-002)
 
 ### Usage by Feature
 - Question Generation: Together.ai → Claude fallback
 - RAG Answers: Together.ai → Claude fallback
 - Feynman Evaluation: Claude only (best reasoning)
-- Image OCR: Gemini Vision
-- Embeddings: OpenAI ada-002
+- Embeddings: Together.ai m2-bert-80M-8k-retrieval
+- Image OCR: Phase 2 (will use Claude Vision or GPT-4 Vision)
 
 ## Pricing Tiers
 
@@ -327,7 +321,7 @@ railway up
    - Embedding worker
 
 2. **Photo Question Upload**
-   - Gemini Vision for text extraction
+   - Claude Vision or GPT-4 Vision for text extraction
    - Normal RAG flow
 
 3. **Feynman Voice Mode**

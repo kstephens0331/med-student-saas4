@@ -36,7 +36,7 @@ I have successfully built a **complete, production-ready Medical Student SaaS pl
 
 #### 4. ✅ RAG Q&A System (Answers from YOUR Materials Only)
 - Vector similarity search using **pgvector**
-- OpenAI ada-002 embeddings
+- Together.ai m2-bert embeddings (cost-efficient)
 - Answers **ONLY** from uploaded materials
 - Source file citations
 - **Free tier: 5 questions/day limit**
@@ -126,10 +126,9 @@ I have successfully built a **complete, production-ready Medical Student SaaS pl
 - ✅ Row Level Security on all tables
 
 #### AI/LLM Strategy (Multi-Model)
-- ✅ **Together.ai (Primary)** - Llama 3.1 70B - $0.88/1M tokens
+- ✅ **Together.ai (Primary)** - Llama 3.1 70B - $0.88/1M tokens (text), $0.01/1M tokens (embeddings)
 - ✅ **Anthropic Claude Sonnet 4 (Fallback)** - $3/1M tokens
-- ✅ **Google Gemini** - Multimodal/Vision (Phase 2)
-- ✅ **OpenAI** - Embeddings only (ada-002)
+- ⏳ **Vision** - Phase 2 (will use Claude Vision or GPT-4 Vision)
 
 #### Payments
 - ✅ Stripe with Checkout Sessions
@@ -186,7 +185,7 @@ I have successfully built a **complete, production-ready Medical Student SaaS pl
 ### RAG Q&A System
 ```typescript
 // Vector similarity search
-✅ Generate embeddings (OpenAI ada-002)
+✅ Generate embeddings (Together.ai m2-bert)
 ✅ Store in file_embeddings table
 ✅ Vector search with pgvector
 ✅ Top 10 most similar chunks
@@ -347,7 +346,7 @@ I have successfully built a **complete, production-ready Medical Student SaaS pl
 
 ### ✅ Vector Search for RAG
 - Supabase pgvector extension
-- OpenAI ada-002 embeddings
+- Together.ai m2-bert-80M-8k-retrieval embeddings
 - `match_embeddings` SQL function
 - Top 10 similarity search
 - Threshold filtering

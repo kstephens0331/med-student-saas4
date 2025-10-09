@@ -8,7 +8,7 @@ Get your Medical Student SaaS platform up and running in 15 minutes!
 - npm installed
 - Supabase account (free tier works)
 - Stripe account (test mode works)
-- API keys for: Together.ai, Anthropic, Google AI, OpenAI
+- API keys for: Together.ai, Anthropic
 
 ## Step 1: Clone & Install (2 minutes)
 
@@ -49,27 +49,17 @@ supabase db push
 4. Public: No (keep private)
 5. Click "Create bucket"
 
-## Step 3: Get API Keys (5 minutes)
+## Step 3: Get API Keys (3 minutes)
 
-### Together.ai (Primary LLM)
+### Together.ai (Primary LLM + Embeddings)
 1. Go to https://together.ai
 2. Sign up / Log in
 3. API → Create API Key
 4. Copy key
 
-### Anthropic Claude (Fallback)
+### Anthropic Claude (Fallback & Evaluation)
 1. Go to https://console.anthropic.com
 2. Get API key
-3. Copy key
-
-### Google AI (Vision)
-1. Go to https://ai.google.dev
-2. Get API key
-3. Copy key
-
-### OpenAI (Embeddings)
-1. Go to https://platform.openai.com
-2. API Keys → Create
 3. Copy key
 
 ## Step 4: Setup Stripe (3 minutes)
@@ -104,8 +94,6 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 # LLM APIs (from Step 3)
 TOGETHER_API_KEY=your_together_key
 ANTHROPIC_API_KEY=your_anthropic_key
-GOOGLE_AI_API_KEY=your_google_key
-OPENAI_API_KEY=your_openai_key
 
 # Stripe (from Step 4)
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxx
