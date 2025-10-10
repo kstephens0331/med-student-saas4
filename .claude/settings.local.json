@@ -18,7 +18,8 @@
       "Bash(ls:*)",
       "Bash(npm run start:*)",
       "Bash(npm ls:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(npm cache clean:*)"
     ],
     "deny": [],
     "ask": []
