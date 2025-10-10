@@ -52,13 +52,38 @@ export const supabase = new Proxy({} as SupabaseClient, {
 })
 
 // Server-side client with service role (for admin operations)
-export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
+// IMPORTANT: Only use on server-side! This will be undefined in browser context.
+let supabaseAdminInstance: SupabaseClient | null = null
+
+export const getSupabaseAdmin = () => {
+  if (typeof window !== 'undefined') {
+    throw new Error('supabaseAdmin can only be used on the server side')
+  }
+
+  if (supabaseAdminInstance) {
+    return supabaseAdminInstance
+  }
+
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error('Missing Supabase admin credentials')
+  }
+
+  supabaseAdminInstance = createClient(supabaseUrl, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false
     }
-  }
-)
+  })
+
+  return supabaseAdminInstance
+}
+
+// Maintain backwards compatibility but throw error if used in browser
+export const supabaseAdmin = new Proxy({} as SupabaseClient, {
+  get: (target, prop) => {
+    const client = getSupabaseAdmin()
+    const value = (client as any)[prop]
+    return typeof value === 'function' ? value.bind(client) : value
+  },
+})
