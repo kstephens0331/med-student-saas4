@@ -20,4 +20,4 @@ export default function RootLayout({
     </html>
   )
 }
-<!-- Cache bust 1760054196 -->
+// Cache bust 1760054196
