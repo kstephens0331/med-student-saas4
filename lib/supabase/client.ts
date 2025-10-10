@@ -5,8 +5,10 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-console.log('[Supabase Client] Initializing with URL:', supabaseUrl ? 'present' : 'MISSING')
-console.log('[Supabase Client] Initializing with Key:', supabaseAnonKey ? 'present' : 'MISSING')
+console.log('[Supabase Client] URL value:', supabaseUrl)
+console.log('[Supabase Client] URL length:', supabaseUrl?.length)
+console.log('[Supabase Client] Key value:', supabaseAnonKey?.substring(0, 20) + '...')
+console.log('[Supabase Client] Key length:', supabaseAnonKey?.length)
 
 // Singleton instance
 let supabaseInstance: SupabaseClient | null = null
@@ -17,12 +19,17 @@ function getSupabaseClient(): SupabaseClient {
     return supabaseInstance
   }
 
+  console.log('[getSupabaseClient] About to create client with:')
+  console.log('[getSupabaseClient] URL:', supabaseUrl)
+  console.log('[getSupabaseClient] Key:', supabaseAnonKey?.substring(0, 20) + '...')
+
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
       `Missing Supabase environment variables. URL: ${!!supabaseUrl}, Key: ${!!supabaseAnonKey}`
     )
   }
 
+  console.log('[getSupabaseClient] Calling createClient...')
   supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       autoRefreshToken: true,
@@ -30,6 +37,7 @@ function getSupabaseClient(): SupabaseClient {
       detectSessionInUrl: true,
     },
   })
+  console.log('[getSupabaseClient] Client created successfully')
 
   return supabaseInstance
 }
