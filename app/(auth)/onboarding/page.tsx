@@ -19,13 +19,20 @@ export default function OnboardingPage() {
   }, [])
 
   const loadSchools = async () => {
-    const { data, error } = await supabase
-      .from('schools')
-      .select('*')
-      .order('name')
+    try {
+      const response = await fetch('/api/schools')
+      const result = await response.json()
 
-    if (data) setSchools(data)
-    if (error) console.error('Error loading schools:', error)
+      if (result.schools) {
+        setSchools(result.schools)
+      } else if (result.error) {
+        console.error('Error loading schools:', result.error)
+        setError('Failed to load schools: ' + result.error)
+      }
+    } catch (err: any) {
+      console.error('Error loading schools:', err)
+      setError('Failed to load schools')
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
