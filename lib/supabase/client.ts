@@ -2,8 +2,8 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 // IMPORTANT: Get env vars at module level so Next.js can replace them at build time
 // These MUST be accessed directly here, not inside functions, for Next.js to inline them
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://bqnmswxuzfguxrfgulps.supabase.co'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbm1zd3h1emZndXhyZmd1bHBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5NDYzMTIsImV4cCI6MjA3NTUyMjMxMn0.bb0uj41iQguNN9tMWIBXcErfRPfkfW1sqvK68lBvni8'
 
 console.log('[Supabase Client] URL value:', supabaseUrl)
 console.log('[Supabase Client] URL length:', supabaseUrl?.length)
