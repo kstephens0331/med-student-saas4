@@ -1,20 +1,17 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
+// Get env vars at module level so Next.js can replace them at build time
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
 // Singleton instance
 let supabaseInstance: SupabaseClient | null = null
 
-// Lazy initialization function - only runs in browser
+// Lazy initialization function
 function getSupabaseClient(): SupabaseClient {
-  if (typeof window === 'undefined') {
-    throw new Error('Supabase client can only be used in browser context')
-  }
-
   if (supabaseInstance) {
     return supabaseInstance
   }
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
@@ -33,7 +30,7 @@ function getSupabaseClient(): SupabaseClient {
   return supabaseInstance
 }
 
-// Export a proxy that lazy-loads the client on first property access
+// Export the client - will be created on first use
 export const supabase = new Proxy({} as SupabaseClient, {
   get: (target, prop) => {
     const client = getSupabaseClient()
