@@ -4,6 +4,16 @@ import { NextResponse } from 'next/server'
 // This API route uses the service role to bypass RLS and set up schools
 export async function POST() {
   try {
+    console.log('[Setup] Starting schools setup...')
+    console.log('[Setup] Service role key exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY)
+
+    // Check if we have the service role key
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json({
+        error: 'SUPABASE_SERVICE_ROLE_KEY not configured in environment variables'
+      }, { status: 500 })
+    }
+
     // Use service role key to bypass RLS
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,14 +26,7 @@ export async function POST() {
       }
     )
 
-    // First, disable RLS on schools table
-    const { error: disableRLSError } = await supabase.rpc('exec_sql', {
-      sql: 'ALTER TABLE schools DISABLE ROW LEVEL SECURITY;'
-    })
-
-    if (disableRLSError) {
-      console.error('RLS disable error:', disableRLSError)
-    }
+    console.log('[Setup] Service role client created')
 
     // Insert schools
     const schools = [
@@ -50,16 +53,23 @@ export async function POST() {
       { name: 'Other', domain: null },
     ]
 
+    console.log('[Setup] Upserting', schools.length, 'schools...')
+
     // Use upsert to avoid duplicate errors
     const { data: insertedSchools, error: insertError } = await supabase
       .from('schools')
-      .upsert(schools, { onConflict: 'name', ignoreDuplicates: true })
+      .upsert(schools, { onConflict: 'name', ignoreDuplicates: false })
       .select()
 
     if (insertError) {
-      console.error('Insert error:', insertError)
-      return NextResponse.json({ error: insertError.message }, { status: 500 })
+      console.error('[Setup] Insert error:', insertError)
+      return NextResponse.json({
+        error: 'Insert failed: ' + insertError.message,
+        details: insertError
+      }, { status: 500 })
     }
+
+    console.log('[Setup] Schools upserted successfully')
 
     // Verify schools were inserted
     const { data: allSchools, error: selectError } = await supabase
@@ -68,9 +78,14 @@ export async function POST() {
       .order('name')
 
     if (selectError) {
-      console.error('Select error:', selectError)
-      return NextResponse.json({ error: selectError.message }, { status: 500 })
+      console.error('[Setup] Select error:', selectError)
+      return NextResponse.json({
+        error: 'Select failed: ' + selectError.message,
+        details: selectError
+      }, { status: 500 })
     }
+
+    console.log('[Setup] Found', allSchools?.length, 'schools in database')
 
     return NextResponse.json({
       success: true,
@@ -79,7 +94,10 @@ export async function POST() {
       schools: allSchools,
     })
   } catch (error: any) {
-    console.error('Setup error:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('[Setup] Unexpected error:', error)
+    return NextResponse.json({
+      error: 'Unexpected error: ' + error.message,
+      stack: error.stack
+    }, { status: 500 })
   }
 }
