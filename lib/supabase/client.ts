@@ -1,25 +1,31 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-// Ensure env vars are available
-if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
-}
-if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-  throw new Error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable')
-}
+// Singleton instance
+let supabaseInstance: SupabaseClient | null = null
 
-// Client-side Supabase client
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  {
+// Get or create client-side Supabase client
+export const supabase = (() => {
+  if (supabaseInstance) {
+    return supabaseInstance
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
+
+  supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true,
     },
-  }
-)
+  })
+
+  return supabaseInstance
+})()
 
 // Server-side client with service role (for admin operations)
 export const supabaseAdmin = createClient(
