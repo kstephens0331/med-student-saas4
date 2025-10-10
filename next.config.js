@@ -13,6 +13,8 @@ const nextConfig = {
       bodySizeLimit: '50mb',
     },
   },
+  output: 'standalone',
+  outputFileTracing: false,
 }
 
 module.exports = nextConfig
