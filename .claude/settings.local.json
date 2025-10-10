@@ -19,7 +19,8 @@
       "Bash(npm run start:*)",
       "Bash(npm ls:*)",
       "Bash(npm uninstall:*)",
-      "Bash(npm cache clean:*)"
+      "Bash(npm cache clean:*)",
+      "Bash(npx supabase:*)"
     ],
     "deny": [],
     "ask": []
