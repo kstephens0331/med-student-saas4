@@ -13,10 +13,6 @@ const nextConfig = {
       bodySizeLimit: '50mb',
     },
   },
-  // Force fresh builds
-  generateBuildId: async () => {
-    return `build-${Date.now()}`
-  },
 }
 
 module.exports = nextConfig
