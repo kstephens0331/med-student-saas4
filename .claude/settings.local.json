@@ -15,7 +15,8 @@
       "Bash(cat:*)",
       "Bash(npm outdated:*)",
       "Bash(git push:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm run start:*)"
     ],
     "deny": [],
     "ask": []
