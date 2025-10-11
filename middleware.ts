@@ -1,24 +1,26 @@
-import { createClient } from '@supabase/supabase-js'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
+  let res = NextResponse.next()
 
-  // Get the auth tokens from cookies
-  const accessToken = req.cookies.get('sb-bqnmswxuzfguxrfgulps-auth-token')?.value
-  const refreshToken = req.cookies.get('sb-bqnmswxuzfguxrfgulps-auth-token-refresh')?.value
-
-  const supabase = createClient(
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
-      auth: {
-        persistSession: false,
-      },
-      global: {
-        headers: {
-          cookie: req.cookies.toString(),
+      cookies: {
+        getAll() {
+          return req.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value))
+          res = NextResponse.next({
+            request: req,
+          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            res.cookies.set(name, value, options)
+          )
         },
       },
     }
@@ -28,7 +30,7 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
-  console.log('[Middleware] Has session:', !!session, 'Has access token:', !!accessToken)
+  console.log('[Middleware] Has session:', !!session)
 
   // Check if user is authenticated
   if (!session && req.nextUrl.pathname.startsWith('/dashboard')) {
@@ -57,7 +59,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // Temporarily disable middleware to debug session issues
-  matcher: [],
-  // matcher: ['/dashboard/:path*', '/login', '/signup', '/onboarding'],
+  matcher: ['/dashboard/:path*', '/login', '/signup', '/onboarding'],
 }
