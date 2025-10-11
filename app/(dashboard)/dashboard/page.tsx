@@ -3,44 +3,43 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 export default async function DashboardPage() {
-  try {
-    const supabase = createServerSupabaseClient()
+  const supabase = createServerSupabaseClient()
 
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-    if (!session) {
-      redirect('/login')
-    }
+  if (!session) {
+    redirect('/login')
+  }
 
-    const userId = session.user.id
+  const userId = session.user.id
 
   // Get user profile with school
   const { data: profile } = await supabase
     .from('user_profiles')
     .select('*, schools(*)')
-    .eq('id', userId!)
+    .eq('id', userId)
     .single()
 
   // Get blocks
   const { data: blocks } = await supabase
     .from('blocks')
     .select('*')
-    .eq('school_id', profile?.school_id!)
+    .eq('school_id', profile?.school_id)
     .order('block_number')
 
   // Get total questions
   const { count: totalQuestions } = await supabase
     .from('questions')
     .select('*', { count: 'exact', head: true })
-    .eq('school_id', profile?.school_id!)
+    .eq('school_id', profile?.school_id)
 
   // Get mastery stats
   const { data: masteryStats } = await supabase
     .from('student_mastery')
     .select('mastery_level')
-    .eq('user_id', userId!)
+    .eq('user_id', userId)
 
   const masteryCount = {
     masters: masteryStats?.filter(m => m.mastery_level === 'masters').length || 0,
@@ -121,16 +120,5 @@ export default async function DashboardPage() {
         </div>
       </div>
     </div>
-  ) catch (error) {
-    console.error('[Dashboard] Error:', error)
-    return (
-      <div className="card">
-        <h1 className="text-2xl font-bold text-red-600">Error Loading Dashboard</h1>
-        <p className="mt-4">There was an error loading your dashboard. Please try logging in again.</p>
-        <Link href="/login" className="btn-primary mt-4 inline-block">
-          Go to Login
-        </Link>
-      </div>
-    )
-  }
+  )
 }
