@@ -33,9 +33,10 @@ export default function LoginPage() {
         .single()
 
       if (profile?.onboarding_completed) {
-        router.push('/dashboard')
+        // Force page reload to refresh middleware session
+        window.location.href = '/dashboard'
       } else {
-        router.push('/onboarding')
+        window.location.href = '/onboarding'
       }
     } catch (err: any) {
       setError(err.message || 'Failed to login')
