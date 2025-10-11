@@ -25,6 +25,12 @@ export default function LoginPage() {
 
       if (error) throw error
 
+      console.log('[Login] Successful login:', data.user.id)
+      console.log('[Login] Session:', data.session)
+
+      // Wait a moment for cookies to be set
+      await new Promise(resolve => setTimeout(resolve, 500))
+
       // Check if user has completed onboarding
       const { data: profile } = await supabase
         .from('user_profiles')
@@ -32,13 +38,18 @@ export default function LoginPage() {
         .eq('id', data.user.id)
         .single()
 
+      console.log('[Login] Profile:', profile)
+
       if (profile?.onboarding_completed) {
+        console.log('[Login] Redirecting to dashboard')
         // Force page reload to refresh middleware session
         window.location.href = '/dashboard'
       } else {
+        console.log('[Login] Redirecting to onboarding')
         window.location.href = '/onboarding'
       }
     } catch (err: any) {
+      console.error('[Login] Error:', err)
       setError(err.message || 'Failed to login')
     } finally {
       setLoading(false)
