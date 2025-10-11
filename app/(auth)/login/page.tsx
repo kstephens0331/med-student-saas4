@@ -1,12 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase/client'
+import { login } from './actions'
 
 export default function LoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -18,40 +16,16 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      const result = await login(email, password)
 
-      if (error) throw error
-
-      console.log('[Login] Successful login:', data.user.id)
-      console.log('[Login] Session:', data.session)
-
-      // Wait a moment for cookies to be set
-      await new Promise(resolve => setTimeout(resolve, 500))
-
-      // Check if user has completed onboarding
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('onboarding_completed')
-        .eq('id', data.user.id)
-        .single()
-
-      console.log('[Login] Profile:', profile)
-
-      if (profile?.onboarding_completed) {
-        console.log('[Login] Redirecting to dashboard')
-        // Force page reload to refresh middleware session
-        window.location.href = '/dashboard'
-      } else {
-        console.log('[Login] Redirecting to onboarding')
-        window.location.href = '/onboarding'
+      if (result?.error) {
+        setError(result.error)
+        setLoading(false)
       }
+      // If no error, the server action will handle the redirect
     } catch (err: any) {
       console.error('[Login] Error:', err)
       setError(err.message || 'Failed to login')
-    } finally {
       setLoading(false)
     }
   }
