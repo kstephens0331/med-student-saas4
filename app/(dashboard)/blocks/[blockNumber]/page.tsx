@@ -2,6 +2,8 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { formatFileSize } from '@/lib/utils/file-hash'
 
+export const dynamic = 'force-dynamic'
+
 export default async function BlockDetailPage({ params }: { params: { blockNumber: string } }) {
   const supabase = createServerSupabaseClient()
 

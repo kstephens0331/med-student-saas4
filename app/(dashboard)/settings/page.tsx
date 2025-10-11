@@ -1,6 +1,8 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export default async function SettingsPage() {
   const supabase = createServerSupabaseClient()
 
