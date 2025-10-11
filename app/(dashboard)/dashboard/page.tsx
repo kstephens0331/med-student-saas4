@@ -16,24 +16,36 @@ export default async function DashboardPage() {
   const userId = session.user.id
 
   // Get user profile with school
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('user_profiles')
     .select('*, schools(*)')
     .eq('id', userId)
     .single()
 
+  if (!profile || profileError) {
+    return (
+      <div className="card">
+        <h1 className="text-2xl font-bold text-red-600">Profile Not Found</h1>
+        <p className="mt-4">Unable to load your profile. Please complete onboarding.</p>
+        <Link href="/onboarding" className="btn-primary mt-4 inline-block">
+          Go to Onboarding
+        </Link>
+      </div>
+    )
+  }
+
   // Get blocks
   const { data: blocks } = await supabase
     .from('blocks')
     .select('*')
-    .eq('school_id', profile?.school_id)
+    .eq('school_id', profile.school_id)
     .order('block_number')
 
   // Get total questions
   const { count: totalQuestions } = await supabase
     .from('questions')
     .select('*', { count: 'exact', head: true })
-    .eq('school_id', profile?.school_id)
+    .eq('school_id', profile.school_id)
 
   // Get mastery stats
   const { data: masteryStats } = await supabase
