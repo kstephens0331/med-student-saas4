@@ -21,8 +21,10 @@ export default function LoginPage() {
       if (result?.error) {
         setError(result.error)
         setLoading(false)
+      } else if (result?.success && result?.redirectTo) {
+        // Server action succeeded, redirect to appropriate page
+        window.location.href = result.redirectTo
       }
-      // If no error, the server action will handle the redirect
     } catch (err: any) {
       console.error('[Login] Error:', err)
       setError(err.message || 'Failed to login')

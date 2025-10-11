@@ -2,7 +2,6 @@
 
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 
 export async function login(email: string, password: string) {
   const cookieStore = cookies()
@@ -46,10 +45,10 @@ export async function login(email: string, password: string) {
 
   console.log('[Login Action] Profile:', profile)
 
-  // Redirect based on onboarding status
+  // Return success with redirect path
   if (profile?.onboarding_completed && profile?.school_id) {
-    redirect('/dashboard')
+    return { success: true, redirectTo: '/dashboard' }
   } else {
-    redirect('/onboarding')
+    return { success: true, redirectTo: '/onboarding' }
   }
 }
