@@ -5,6 +5,10 @@ import type { NextRequest } from 'next/server'
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
 
+  // Get the auth tokens from cookies
+  const accessToken = req.cookies.get('sb-bqnmswxuzfguxrfgulps-auth-token')?.value
+  const refreshToken = req.cookies.get('sb-bqnmswxuzfguxrfgulps-auth-token-refresh')?.value
+
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -23,6 +27,8 @@ export async function middleware(req: NextRequest) {
   const {
     data: { session },
   } = await supabase.auth.getSession()
+
+  console.log('[Middleware] Has session:', !!session, 'Has access token:', !!accessToken)
 
   // Check if user is authenticated
   if (!session && req.nextUrl.pathname.startsWith('/dashboard')) {
@@ -51,5 +57,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/login', '/signup', '/onboarding'],
+  // Temporarily disable middleware to debug session issues
+  matcher: [],
+  // matcher: ['/dashboard/:path*', '/login', '/signup', '/onboarding'],
 }
