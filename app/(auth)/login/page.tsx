@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { login } from './actions'
+import { supabase } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -16,14 +16,30 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      const result = await login(email, password)
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-      if (result?.error) {
-        setError(result.error)
-        setLoading(false)
-      } else if (result?.success && result?.redirectTo) {
-        // Server action succeeded, redirect to appropriate page
-        window.location.href = result.redirectTo
+      if (error) throw error
+
+      console.log('[Login] Successful login:', data.user.id)
+
+      // Check if user has completed onboarding
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('onboarding_completed, school_id')
+        .eq('id', data.user.id)
+        .single()
+
+      console.log('[Login] Profile:', profile)
+
+      if (profile?.onboarding_completed && profile?.school_id) {
+        console.log('[Login] Redirecting to dashboard')
+        window.location.href = '/dashboard'
+      } else {
+        console.log('[Login] Redirecting to onboarding')
+        window.location.href = '/onboarding'
       }
     } catch (err: any) {
       console.error('[Login] Error:', err)
