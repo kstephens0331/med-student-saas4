@@ -3,17 +3,22 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 export default async function DashboardPage() {
-  const supabase = createServerSupabaseClient()
+  try {
+    const supabase = createServerSupabaseClient()
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
 
-  if (!session) {
-    redirect('/login')
-  }
+    console.log('[Dashboard] Has session:', !!session)
 
-  const userId = session.user.id
+    if (!session) {
+      console.log('[Dashboard] No session, redirecting to login')
+      redirect('/login')
+    }
+
+    const userId = session.user.id
+    console.log('[Dashboard] User ID:', userId)
 
   // Get user profile with school
   const { data: profile, error: profileError } = await supabase
@@ -133,4 +138,19 @@ export default async function DashboardPage() {
       </div>
     </div>
   )
+  } catch (error) {
+    console.error('[Dashboard] Error:', error)
+    return (
+      <div className="card">
+        <h1 className="text-2xl font-bold text-red-600">Error Loading Dashboard</h1>
+        <p className="mt-4">An error occurred while loading your dashboard.</p>
+        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm overflow-auto">
+          {error instanceof Error ? error.message : String(error)}
+        </pre>
+        <Link href="/login" className="btn-primary mt-4 inline-block">
+          Back to Login
+        </Link>
+      </div>
+    )
+  }
 }
